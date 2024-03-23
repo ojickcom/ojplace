@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "276413757249",
+    "firebase_url": "https://ojplace-b72e6-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "ojplace-b72e6",
+    "storage_bucket": "ojplace-b72e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276413757249:android:bf364e871548053e3993c0",
+        "android_client_info": {
+          "package_name": "com.example.ojplace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4wT61szyVPNsUHYOVfJsIwB7mwlbh3yY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
