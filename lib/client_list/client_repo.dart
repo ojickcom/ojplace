@@ -12,7 +12,11 @@ class FirebaseClientRepository extends ClientRepository {
   @override
   Future<void> addClient(ClientModel client) async {
     await firestore.collection("clients").doc().set(
-      {"clients_name": client.clientsName, "keyword": client.targetKeywords},
+      {
+        "clients_name": client.clientsName,
+        "clientsMemo": client.clientsMemo,
+        "timestamp": FieldValue.serverTimestamp(),
+      },
     );
   }
 

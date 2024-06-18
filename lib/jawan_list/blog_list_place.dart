@@ -1,19 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ojplace/blog_list/mvvm/blog_util.dart';
-import 'package:ojplace/blog_list/mvvm/blog_view_model.dart';
+import 'package:ojplace/jawan_list/mvvm/copy_input_data.dart';
+import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
 import 'package:ojplace/constants/gaps.dart';
-import 'package:ojplace/blog_list/web_db.dart';
+import 'package:ojplace/jawan_list/mvvm/util/popup_modify.dart';
+import 'package:ojplace/jawan_list/mvvm/util/web_db.dart';
 
-class BlogListPlace extends ConsumerStatefulWidget {
-  const BlogListPlace({super.key});
+class PlaceKeyword extends ConsumerStatefulWidget {
+  const PlaceKeyword({super.key});
 
   @override
-  ConsumerState<BlogListPlace> createState() => _BlogListPlaceState();
+  ConsumerState<PlaceKeyword> createState() => _BlogListPlaceState();
 }
 
-class _BlogListPlaceState extends ConsumerState<BlogListPlace> {
+class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
   @override
   void initState() {
     super.initState();
@@ -38,7 +39,7 @@ class _BlogListPlaceState extends ConsumerState<BlogListPlace> {
   ) {
     final blogs = ref.watch(blogPlaceProvider);
     final TextEditingController textEditingController = TextEditingController();
-    final copyAndDel = CopyAndDelProvider();
+    final copyAndDel = CopyAndInputdataProvider();
     final popupAndModify = ref.watch(popupAndModifyProvider);
 
 //본문 시작 됨
@@ -131,7 +132,7 @@ class _BlogListPlaceState extends ConsumerState<BlogListPlace> {
                                         ),
                                         ElevatedButton(
                                           onPressed: () async =>
-                                              copyAndDel.copyAndDel(
+                                              copyAndDel.copyAndInputData1(
                                             browserNumber,
                                             context,
                                             data[j].blogTitle,

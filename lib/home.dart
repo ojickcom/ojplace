@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ojplace/authentification/authentication_repo.dart';
 import 'package:ojplace/authentification/log_in.dart';
-import 'package:ojplace/blog_list/blog_list_place.dart';
-import 'package:ojplace/blog_list/blog_list_start.dart';
-import 'package:ojplace/blog_list/blog_list_stay.dart';
-import 'package:ojplace/blog_list/blog_editing.dart';
-import 'package:ojplace/blog_list/blog_add.dart';
-import 'package:ojplace/blog_list/blog_list_all.dart';
+import 'package:ojplace/blog/blog_list.dart';
+import 'package:ojplace/jawan_list/keyword_list_place.dart';
+import 'package:ojplace/jawan_list/keyword_list_start.dart';
+import 'package:ojplace/jawan_list/keyword_list_yuji.dart';
+import 'package:ojplace/jawan_list/keyword_daegi.dart';
+import 'package:ojplace/jawan_list/keyword_add.dart';
+import 'package:ojplace/jawan_list/keyword_list_all.dart';
 import 'package:ojplace/client_list/add_clinent.dart';
 import 'package:ojplace/client_list/client_list_view.dart';
+import 'package:ojplace/constants/gaps.dart';
+import 'package:ojplace/jawan_list/mk_list_1st.dart';
 
 class Home extends ConsumerWidget {
   const Home({super.key});
@@ -18,13 +21,67 @@ class Home extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoggedIn = ref.watch(loggedInStateProvider);
 
+    void goToLogin() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LogIn(),
+        ),
+      );
+    }
+
+    void goBlog() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const BlogList(),
+        ),
+      );
+    }
+
     return MaterialApp(
       home: DefaultTabController(
         length: 9,
         initialIndex: 0,
         child: Scaffold(
           appBar: AppBar(
-            // title: const Text("고객 리스트"),
+            title: Row(
+              children: [
+                const SizedBox(
+                  width: 500,
+                  child: Center(
+                    child: Text(
+                      "//",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                    onTap: goToLogin,
+                    child: const Text(
+                      "로그인",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    )),
+                Gaps.h28,
+                GestureDetector(
+                    onTap: goBlog,
+                    child: const Text(
+                      "블로그",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    )),
+              ],
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.grey,
+            toolbarHeight: 20,
             bottom: const TabBar(
               tabs: [
                 Tab(
@@ -37,13 +94,13 @@ class Home extends ConsumerWidget {
                   text: "플레이스 클릭",
                 ),
                 Tab(
-                  text: "포스팅 리스트4",
+                  text: "자완 대기",
                 ),
                 Tab(
-                  text: "포스팅 쓰기",
+                  text: "키워드 입력",
                 ),
                 Tab(
-                  text: "포스팅 현황",
+                  text: "키워드 현황",
                 ),
                 Tab(
                   text: "클라이언트 리스트 ",
@@ -52,7 +109,7 @@ class Home extends ConsumerWidget {
                   text: "클라이언트 추가",
                 ),
                 Tab(
-                  text: "로그인",
+                  text: "초기화",
                 ),
               ],
             ),
@@ -61,22 +118,22 @@ class Home extends ConsumerWidget {
             child: TabBarView(
               children: [
                 isLoggedIn.when(
-                  data: (data) => data ? postingList1() : login(),
+                  data: (data) => data ? jawanStart() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
                 isLoggedIn.when(
-                  data: (data) => data ? postingList2() : login(),
+                  data: (data) => data ? jawanYuji() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
                 isLoggedIn.when(
-                  data: (data) => data ? postingExm() : login(),
+                  data: (data) => data ? placeKeyword() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
                 isLoggedIn.when(
-                  data: (data) => data ? blogEdit() : login(),
+                  data: (data) => data ? jawanDaegi() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
@@ -86,7 +143,7 @@ class Home extends ConsumerWidget {
                   error: (error, _) => Text('Error: $error'),
                 ),
                 isLoggedIn.when(
-                  data: (data) => data ? postingList() : login(),
+                  data: (data) => data ? keywordAll() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
@@ -100,6 +157,11 @@ class Home extends ConsumerWidget {
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
+                isLoggedIn.when(
+                  data: (data) => data ? mk1st() : login(),
+                  loading: () => const CircularProgressIndicator(),
+                  error: (error, _) => Text('Error: $error'),
+                ),
                 login(),
               ],
             ),
@@ -110,24 +172,24 @@ class Home extends ConsumerWidget {
   }
 }
 
-Widget postingList1() {
-  return const BlogClick01();
+Widget jawanStart() {
+  return const JawanStart();
 }
 
-Widget blogEdit() {
-  return const BlogEditing();
+Widget jawanYuji() {
+  return const JawanYuji();
 }
 
-Widget postingList2() {
-  return const BlogStay();
+Widget placeKeyword() {
+  return const PlaceKeyword();
 }
 
-Widget postingExm() {
-  return const BlogListPlace();
+Widget keywordAll() {
+  return const KeywordAll();
 }
 
-Widget postingList() {
-  return const BlogList();
+Widget jawanDaegi() {
+  return const JawanDaegi();
 }
 
 Widget wrightingPost() {
@@ -145,6 +207,11 @@ Widget _buildClientList() {
 Widget _buildAddClientForm() {
   // 클라이언트 추가 폼 구현
   return AddClient();
+}
+
+Widget mk1st() {
+  // 클라이언트 추가 폼 구현
+  return const MkList1st();
 }
 
 Widget login() {

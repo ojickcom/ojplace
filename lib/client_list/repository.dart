@@ -14,11 +14,11 @@ final repoProvider = FutureProvider<List<ClientModel>>((ref) async {
   return clients;
 });
 
-void addClient(String clientName, String targetKeywords) async {
+void addClient(String clientName, String clientsMemo) async {
   try {
     await FirebaseFirestore.instance.collection("clients").add({
       "clients_name": clientName,
-      "keyword": targetKeywords,
+      "clientsMemo": clientsMemo,
     });
   } catch (e) {
     print("Error : $e");

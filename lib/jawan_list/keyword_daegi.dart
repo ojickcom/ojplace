@@ -1,22 +1,26 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ojplace/blog_list/mvvm/blog_util.dart';
-import 'package:ojplace/blog_list/mvvm/blog_view_model.dart';
+import 'package:ojplace/jawan_list/mvvm/keyword_model.dart';
+import 'package:ojplace/jawan_list/mvvm/copy_input_data.dart';
+import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
 import 'package:ojplace/constants/gaps.dart';
-import 'package:ojplace/blog_list/web_db.dart';
+import 'package:ojplace/jawan_list/mvvm/util/popup_modify.dart';
+import 'package:ojplace/jawan_list/mvvm/util/web_db.dart';
 
-class BlogClick01 extends ConsumerStatefulWidget {
-  const BlogClick01({super.key});
+class JawanDaegi extends ConsumerStatefulWidget {
+  const JawanDaegi({super.key});
 
   @override
-  ConsumerState<BlogClick01> createState() => _BlogClick01State();
+  ConsumerState<JawanDaegi> createState() => _BlogStayState();
 }
 
-class _BlogClick01State extends ConsumerState<BlogClick01> {
+class _BlogStayState extends ConsumerState<JawanDaegi> {
   int browserNumber = 1;
   String userEmail = '';
-
+  final keywordDaegiProvider = FutureProvider<List<KeywordModel>>((ref) async {
+    return ref.read(blogViewModelProvider.notifier).keywordDaegi();
+  });
   @override
   void initState() {
     super.initState();
@@ -38,9 +42,9 @@ class _BlogClick01State extends ConsumerState<BlogClick01> {
     BuildContext context,
   ) {
 // 팝업창 띄우기
-    final blogs = ref.watch(blogListProvider);
+    final blogs = ref.watch(keywordDaegiProvider);
     final TextEditingController textEditingController = TextEditingController();
-    final copyAndDel = CopyAndDelProvider();
+    final copyAndDel = CopyAndInputdataProvider();
     final popupAndModify = ref.watch(popupAndModifyProvider);
 
 //본문 시작 됨
@@ -81,40 +85,71 @@ class _BlogClick01State extends ConsumerState<BlogClick01> {
                         ),
                         Gaps.h20,
                         ElevatedButton(
-                          onPressed: () {
-                            final mkWebBrowser =
-                                ref.read(mkWebBrowserProvider.notifier);
-                            mkWebBrowser.mkBrowser1([]);
-                            print("mk성공");
-                          },
-                          child: const Text('ID만들기1'),
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 161, 8, 221)),
+                          child: const Text(
+                            "첫페이지",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                         Gaps.h10,
                         ElevatedButton(
-                          onPressed: () {
-                            final mkWebBrowser =
-                                ref.read(mkWebBrowserProvider.notifier);
-                            mkWebBrowser.mkBrowser2([]);
-                            print("mk성공");
-                          },
-                          child: const Text('ID만들기2'),
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 180, 133, 2)),
+                          child: const Text(
+                            "지정블로그",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                         Gaps.h10,
                         ElevatedButton(
-                          onPressed: () {
-                            final mkWebBrowser =
-                                ref.read(mkWebBrowserProvider.notifier);
-                            mkWebBrowser.mkBrowser3([]);
-                            print("mk성공");
-                          },
-                          child: const Text('ID만들기3'),
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 221, 207, 8)),
+                          child: const Text(
+                            "지정웹문서",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Gaps.h10,
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue),
+                          child: const Text(
+                            "랜덤블로그",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Gaps.h10,
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 16, 141, 80)),
+                          child: const Text(
+                            "플레이스",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                         Gaps.h10,
                         Text(userEmail),
                         Gaps.h10,
-                        const Text("1번 키워드숫자, 90번 키워드숫자"),
-                        Gaps.h10,
-                        const Text("클릭횟수"),
                       ],
                     ),
                     //한 행에 3개씩 정렬하기
@@ -156,7 +191,7 @@ class _BlogClick01State extends ConsumerState<BlogClick01> {
                                         ),
                                         ElevatedButton(
                                           onPressed: () async =>
-                                              copyAndDel.copyAndDel(
+                                              copyAndDel.copyAndInputData3(
                                             browserNumber,
                                             context,
                                             definedData[j].blogTitle,

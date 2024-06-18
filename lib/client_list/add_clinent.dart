@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ojplace/client_list/repository.dart';
+import 'package:ojplace/constants/gaps.dart';
 
 class AddClient extends ConsumerWidget {
   AddClient({super.key});
   final TextEditingController clientNameController = TextEditingController();
 
-  final TextEditingController targetKeywordsController =
-      TextEditingController();
+  final TextEditingController clientMemoController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final addClientProvider = FutureProvider<void>((ref) async {
       final clientName = clientNameController.text;
-      final targetKeywords = targetKeywordsController.text;
-      return addClient(clientName, targetKeywords);
+      final clientMemo = clientMemoController.text;
+      return addClient(clientName, clientMemo);
     });
     return Scaffold(
       body: Center(
@@ -48,9 +48,9 @@ class AddClient extends ConsumerWidget {
                   height: 16,
                 ),
                 TextField(
-                  controller: targetKeywordsController,
+                  controller: clientMemoController,
                   decoration: const InputDecoration(
-                    labelText: '키워드',
+                    labelText: '메모',
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide(width: 1, color: Colors.redAccent),
@@ -66,28 +66,11 @@ class AddClient extends ConsumerWidget {
                   ),
                   onChanged: (aaa) {},
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                TextFormField(
-                  // initialValue: keyword,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.account_circle,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(35.0),
-                      ),
-                    ),
-                    hintText: 'User name',
-                  ),
-                ),
+                Gaps.v20,
                 ElevatedButton.icon(
                   onPressed: () async {
                     try {
                       ref.read(addClientProvider);
-                      print("Succeed : 진짜 되냐? 되면 알려다오 제발~!");
                     } catch (e) {
                       print("failed : $e");
                     }

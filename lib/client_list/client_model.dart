@@ -1,18 +1,18 @@
 class ClientModel {
   final String clientsName;
-  final String targetKeywords;
+  String? clientsMemo;
   String? id;
 
   ClientModel({
     required this.clientsName,
-    required this.targetKeywords,
+    this.clientsMemo,
     this.id,
   });
 
   factory ClientModel.fromJson(Map<String, dynamic> json, String id) {
     return ClientModel(
       clientsName: json["clients_name"] ?? "",
-      targetKeywords: json["keyword"] ?? "",
+      clientsMemo: json["clientsMemo"] ?? "",
       id: id,
     );
   }
