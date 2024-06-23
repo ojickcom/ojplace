@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ojplace/constants/gaps.dart';
-import 'package:ojplace/jawan_list/mvvm/util/web_db.dart';
+import 'package:ojplace/jawan_list/mvvm/util/format_list.dart';
 
-class MkList1st extends ConsumerWidget {
-  const MkList1st({super.key});
+class ResetKeywordList1st extends ConsumerWidget {
+  const ResetKeywordList1st({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

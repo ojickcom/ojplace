@@ -8,22 +8,21 @@ import 'package:ojplace/jawan_list/mvvm/util/button_color.dart';
 import 'package:ojplace/jawan_list/mvvm/util/first_row.dart';
 import 'package:ojplace/jawan_list/mvvm/util/popup_modify.dart';
 
-class PlaceKeyword extends ConsumerStatefulWidget {
-  const PlaceKeyword({super.key});
+class MkJawan1st extends ConsumerStatefulWidget {
+  const MkJawan1st({super.key});
 
   @override
-  ConsumerState<PlaceKeyword> createState() => _BlogListPlaceState();
+  ConsumerState<MkJawan1st> createState() => _BlogListPlaceState();
 }
 
-class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
+class _BlogListPlaceState extends ConsumerState<MkJawan1st> {
   int browserNumber = 1;
 
   @override
   Widget build(
     BuildContext context,
   ) {
-    final blogs = ref.watch(placeProvider1);
-
+    final blogs = ref.watch(mkJawan1stProvider);
     final copyAndDel = CopyAndInputdataProvider();
     final popupAndModify = ref.watch(popupAndModifyProvider);
 
@@ -50,7 +49,7 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
                       children: [
                         for (int i = 0; i < data.length; i += 5)
                           Padding(
-                            padding: const EdgeInsets.all(2.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [

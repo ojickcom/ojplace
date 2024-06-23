@@ -8,21 +8,21 @@ import 'package:ojplace/jawan_list/mvvm/util/button_color.dart';
 import 'package:ojplace/jawan_list/mvvm/util/first_row.dart';
 import 'package:ojplace/jawan_list/mvvm/util/popup_modify.dart';
 
-class PlaceKeyword extends ConsumerStatefulWidget {
-  const PlaceKeyword({super.key});
+class MkJawan2nd extends ConsumerStatefulWidget {
+  const MkJawan2nd({super.key});
 
   @override
-  ConsumerState<PlaceKeyword> createState() => _BlogListPlaceState();
+  ConsumerState<MkJawan2nd> createState() => _BlogListPlaceState();
 }
 
-class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
+class _BlogListPlaceState extends ConsumerState<MkJawan2nd> {
   int browserNumber = 1;
 
   @override
   Widget build(
     BuildContext context,
   ) {
-    final blogs = ref.watch(placeProvider1);
+    final blogs = ref.watch(jawan2ndProvider);
 
     final copyAndDel = CopyAndInputdataProvider();
     final popupAndModify = ref.watch(popupAndModifyProvider);
@@ -44,13 +44,12 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
                         ActionButtons(),
                       ],
                     ),
-                    //한 행에 3개씩 정렬하기
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         for (int i = 0; i < data.length; i += 5)
                           Padding(
-                            padding: const EdgeInsets.all(2.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [

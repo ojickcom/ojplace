@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ojplace/client_list/repository.dart';
+import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
 
 class WebBrowser {
   int number;

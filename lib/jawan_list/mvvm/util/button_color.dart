@@ -8,7 +8,7 @@ class IconStyle {
   static ButtonStyle getButtonStyle(String blogType) {
     Color backgroundColor;
 
-    if (blogType == "지정블로그") {
+    if (blogType == "밀어내기") {
       backgroundColor = const Color.fromARGB(255, 180, 133, 2);
     } else if (blogType == "플레이스") {
       backgroundColor = const Color.fromARGB(255, 16, 141, 80);

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ojplace/client_list/add_clinent.dart';
 import 'package:ojplace/jawan_list/keyword_add.dart';
 import 'package:ojplace/test/test.dart';
 // import 'package:cloud_firestore_web/cloud_firestore.dart;
@@ -12,18 +11,12 @@ class FrontPage extends StatefulWidget {
 }
 
 class _FrontPageState extends State<FrontPage> {
-  void _onTap() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AddClient(),
-      ),
-    );
-  }
+  void _onTap() {}
 
   void _onKeyword() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const BlogAdd(),
+        builder: (context) => const KeywordAdd(),
       ),
     );
   }

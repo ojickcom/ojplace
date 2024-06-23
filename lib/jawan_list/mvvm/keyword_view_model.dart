@@ -57,46 +57,69 @@ class BlogViewModel extends StateNotifier<List<KeywordModel>> {
     }
   }
 
-  // Future<double> getFieldsCountInCollection() async {
-  //   try {
-  //     QuerySnapshot querySnapshot = await firestore.collection("blog").get();
-  //     double totalFieldsCount = 0;
-
-  //     for (var doc in querySnapshot.docs ?? []) {
-  //       // Use empty list if null
-  //       totalFieldsCount += doc.data().length;
-  //     }
-
-  //     return totalFieldsCount;
-  //   } catch (e) {
-  //     // 예외 처리
-  //     rethrow;
-  //   }
-  // }
-
-  Future<List<KeywordModel>> keywordStart() async {
+  Future<List<KeywordModel>> mkJawan1st() async {
     try {
       final query =
-          firestore.collection("blog").where("blogGroup", isEqualTo: "자완초입")
-          // .orderBy("date", descending: true)
-          ;
-      QuerySnapshot querySnapshot = await query.get();
-      List<KeywordModel> blogs = [];
+          firestore.collection("blog").where("blogGroup", isEqualTo: "자완초입");
+      QuerySnapshot querySnapshot = await query
+          // .orderBy('timestamp', descending: true)
+          .where(
+            "blogId",
+          )
+          .get();
+      List<KeywordModel> blogStart = [];
 
       for (var doc in querySnapshot.docs) {
         final String id = doc.id;
-        blogs.add(KeywordModel.fromJson(
+        blogStart.add(KeywordModel.fromJson(
             doc.data()! as Map<String, dynamic>? ?? {},
             id: id));
       }
-      return blogs;
+      return blogStart;
     } catch (e) {
       // print(" Erro : $e");
       rethrow;
     }
   }
 
-  Future<List<KeywordModel>> keywordYuji() async {
+  Future<List<KeywordModel>> jawan2ndProvider() async {
+    try {
+      final query =
+          firestore.collection("blog").where("blogGroup", isEqualTo: "자완초입");
+      QuerySnapshot querySnapshot = await query.get();
+
+      List<KeywordModel> blogs = [];
+
+      for (var doc in querySnapshot.docs) {
+        final String id = doc.id;
+        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        final String? blogTitle = data['blogTitle'] as String?;
+        if (blogTitle != null) {
+          // Split the blogTitle to remove the last word
+          List<String> splitTitle = blogTitle.split(' ');
+          if (splitTitle.length > 1) {
+            splitTitle.removeLast(); // Remove the last word
+          }
+
+          // Join the remaining words back into a string
+          String modifiedTitle = splitTitle.join(' ');
+
+          // Update the data locally
+          data['blogTitle'] = modifiedTitle;
+        }
+
+        blogs.add(KeywordModel.fromJson(data, id: id));
+      }
+      return blogs;
+    } catch (e) {
+      // Handle error
+      print("Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<List<KeywordModel>> jawanYuji1stProvider() async {
     try {
       QuerySnapshot querySnapshot = await firestore
           .collection("blog")
@@ -118,15 +141,13 @@ class BlogViewModel extends StateNotifier<List<KeywordModel>> {
     }
   }
 
-  Future<List<KeywordModel>> keywordPlace() async {
+  Future<List<KeywordModel>> eventProvider() async {
     try {
-      final query =
-          firestore.collection("blog").where("blogGroup", isEqualTo: "플레이스용");
-      QuerySnapshot querySnapshot = await query
-          .where(
-            "blogId",
-          )
+      QuerySnapshot querySnapshot = await firestore
+          .collection("blog")
+          .where("blogGroup", isEqualTo: "event")
           .get();
+
       List<KeywordModel> blogs = [];
 
       for (var doc in querySnapshot.docs) {
@@ -142,14 +163,94 @@ class BlogViewModel extends StateNotifier<List<KeywordModel>> {
     }
   }
 
-  Future<List<KeywordModel>> keywordDaegi() async {
+  Future<List<KeywordModel>> jawanYuji2ndProvider() async {
     try {
       final query =
-          firestore.collection("blog").where("blogGroup", isEqualTo: "자완초입");
+          firestore.collection("blog").where("blogGroup", isEqualTo: "자완유지용");
+      QuerySnapshot querySnapshot = await query.get();
+
+      List<KeywordModel> blogs = [];
+
+      for (var doc in querySnapshot.docs) {
+        final String id = doc.id;
+        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        final String? blogTitle = data['blogTitle'] as String?;
+        if (blogTitle != null) {
+          // Split the blogTitle to remove the last word
+          List<String> splitTitle = blogTitle.split(' ');
+          if (splitTitle.length > 1) {
+            splitTitle.removeLast(); // Remove the last word
+          }
+
+          // Join the remaining words back into a string
+          String modifiedTitle = splitTitle.join(' ');
+
+          // Update the data locally
+          data['blogTitle'] = modifiedTitle;
+        }
+
+        blogs.add(KeywordModel.fromJson(data, id: id));
+      }
+      return blogs;
+    } catch (e) {
+      // Handle error
+      print("Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<List<KeywordModel>> placeProvider1() async {
+    try {
+      final query =
+          firestore.collection("blog").where("blogGroup", isEqualTo: "플레이스용");
       QuerySnapshot querySnapshot = await query
           .where(
             "blogId",
           )
+          .get();
+      List<KeywordModel> blogStart = [];
+
+      for (var doc in querySnapshot.docs) {
+        final String id = doc.id;
+        blogStart.add(KeywordModel.fromJson(
+            doc.data()! as Map<String, dynamic>? ?? {},
+            id: id));
+      }
+      return blogStart;
+    } catch (e) {
+      // print(" Erro : $e");
+      rethrow;
+    }
+  }
+
+  Future<List<KeywordModel>> newKeywordProvier() async {
+    try {
+      QuerySnapshot querySnapshot = await firestore
+          .collection("blog")
+          .where("blogGroup", isEqualTo: "신규")
+          .get();
+
+      List<KeywordModel> blogs = [];
+
+      for (var doc in querySnapshot.docs) {
+        final String id = doc.id;
+        blogs.add(KeywordModel.fromJson(
+            doc.data()! as Map<String, dynamic>? ?? {},
+            id: id));
+      }
+      return blogs;
+    } catch (e) {
+      // print(" Erro : $e");
+      rethrow;
+    }
+  }
+
+  Future<List<KeywordModel>> standbyProvier() async {
+    try {
+      QuerySnapshot querySnapshot = await firestore
+          .collection("blog")
+          .where("blogGroup", isEqualTo: "대기")
           .get();
 
       List<KeywordModel> blogs = [];
@@ -236,11 +337,32 @@ final blogListProvider = FutureProvider<List<KeywordModel>>((ref) async {
   return ref.read(blogViewModelProvider.notifier).keywordListAll();
 });
 
-final blogStayProvider = FutureProvider<List<KeywordModel>>((ref) async {
-  return ref.read(blogViewModelProvider.notifier).keywordYuji();
+final mkJawan1stProvider = FutureProvider<List<KeywordModel>>((ref) async {
+  return ref.read(blogViewModelProvider.notifier).mkJawan1st();
 });
-final blogPlaceProvider = FutureProvider<List<KeywordModel>>((ref) async {
-  return ref.read(blogViewModelProvider.notifier).keywordPlace();
+final jawan2ndProvider = FutureProvider<List<KeywordModel>>((ref) async {
+  return ref.read(blogViewModelProvider.notifier).jawan2ndProvider();
+});
+final jawanYuji1stProvider = FutureProvider<List<KeywordModel>>((ref) async {
+  return ref.read(blogViewModelProvider.notifier).jawanYuji1stProvider();
+});
+final jawanYuji2ndProvider = FutureProvider<List<KeywordModel>>((ref) async {
+  return ref.read(blogViewModelProvider.notifier).jawanYuji2ndProvider();
+});
+final placeProvider1 = FutureProvider<List<KeywordModel>>((ref) async {
+  return ref.read(blogViewModelProvider.notifier).placeProvider1();
+});
+final placeProvider2 = FutureProvider<List<KeywordModel>>((ref) async {
+  return ref.read(blogViewModelProvider.notifier).placeProvider1();
+});
+final newKeywordProvier = FutureProvider<List<KeywordModel>>((ref) async {
+  return ref.read(blogViewModelProvider.notifier).newKeywordProvier();
+});
+final standbyProvier = FutureProvider<List<KeywordModel>>((ref) async {
+  return ref.read(blogViewModelProvider.notifier).standbyProvier();
+});
+final eventProvider = FutureProvider<List<KeywordModel>>((ref) async {
+  return ref.read(blogViewModelProvider.notifier).eventProvider();
 });
 
 // 타이틀 변경과 삭제 provider

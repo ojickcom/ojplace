@@ -4,41 +4,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ojplace/jawan_list/mvvm/copy_input_data.dart';
 import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
 import 'package:ojplace/constants/gaps.dart';
+import 'package:ojplace/jawan_list/mvvm/util/button_color.dart';
+import 'package:ojplace/jawan_list/mvvm/util/first_row.dart';
 import 'package:ojplace/jawan_list/mvvm/util/popup_modify.dart';
-import 'package:ojplace/jawan_list/mvvm/util/web_db.dart';
 
-class PlaceKeyword extends ConsumerStatefulWidget {
-  const PlaceKeyword({super.key});
+class PlaceYuji extends ConsumerStatefulWidget {
+  const PlaceYuji({super.key});
 
   @override
-  ConsumerState<PlaceKeyword> createState() => _BlogListPlaceState();
+  ConsumerState<PlaceYuji> createState() => _BlogListPlaceState();
 }
 
-class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
-  @override
-  void initState() {
-    super.initState();
-    getUserEmail();
-  }
-
+class _BlogListPlaceState extends ConsumerState<PlaceYuji> {
   int browserNumber = 1;
-  String userEmail = '';
-  FirebaseAuth auth = FirebaseAuth.instance;
-  void getUserEmail() {
-    User? user = auth.currentUser;
-    if (user != null) {
-      userEmail = user.email ?? ''; // 사용자의 이메일을 userEmail 변수에 저장합니다.
-    } else {
-      print('현재 로그인된 사용자가 없습니다.');
-    }
-  }
 
   @override
   Widget build(
     BuildContext context,
   ) {
-    final blogs = ref.watch(blogPlaceProvider);
-    final TextEditingController textEditingController = TextEditingController();
+    final blogs = ref.watch(placeProvider2);
+
     final copyAndDel = CopyAndInputdataProvider();
     final popupAndModify = ref.watch(popupAndModifyProvider);
 
@@ -46,7 +31,7 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
     return Scaffold(
       body: Center(
         child: SizedBox(
-          width: 1024,
+          width: 1500,
           child: Center(
             child: blogs.when(
               data: (data) {
@@ -54,56 +39,23 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
 
                 return Column(
                   children: [
-                    Row(
+                    const Row(
                       children: [
-                        SizedBox(
-                          width: 100,
-                          height: 50,
-                          child: TextField(
-                            decoration: const InputDecoration(),
-                            controller: textEditingController,
-                          ),
-                        ),
-                        //매크로에서 browserNumber 받아
-                        ElevatedButton(
-                          onPressed: () async {
-                            final String enteredBrowserNumber =
-                                textEditingController.text;
-
-                            if (int.tryParse(enteredBrowserNumber) == null) {
-                              return;
-                            }
-
-                            browserNumber = int.parse(enteredBrowserNumber);
-                          },
-                          child: const Text("입력"),
-                        ),
-                        Gaps.h14,
-                        ElevatedButton(
-                          onPressed: () {
-                            final mkWebBrowser =
-                                ref.read(mkWebBrowserProvider.notifier);
-                            mkWebBrowser.mkPlaceBrowser1([]);
-                            print("mk성공");
-                          },
-                          child: const Text('ID만들기3'),
-                        ),
-                        Gaps.h20,
-                        Text(userEmail),
+                        ActionButtons(),
                       ],
                     ),
                     //한 행에 3개씩 정렬하기
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        for (int i = 0; i < data.length; i += 3)
+                        for (int i = 0; i < data.length; i += 5)
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 for (int j = i;
-                                    j < i + 3 && j < data.length;
+                                    j < i + 5 && j < data.length;
                                     j++)
                                   Expanded(
                                     child: Wrap(
@@ -137,7 +89,9 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
                                             context,
                                             data[j].blogTitle,
                                           ),
-                                          child: const Text("복사 "),
+                                          style: IconStyle.getButtonStyle(
+                                              data[j].blogType.toString()),
+                                          child: const Text("+"),
                                         ),
                                         const SizedBox(width: 16),
 

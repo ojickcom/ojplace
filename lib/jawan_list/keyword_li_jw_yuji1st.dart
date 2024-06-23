@@ -1,28 +1,29 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ojplace/constants/gaps.dart';
 import 'package:ojplace/jawan_list/mvvm/copy_input_data.dart';
 import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
-import 'package:ojplace/constants/gaps.dart';
 import 'package:ojplace/jawan_list/mvvm/util/button_color.dart';
 import 'package:ojplace/jawan_list/mvvm/util/first_row.dart';
 import 'package:ojplace/jawan_list/mvvm/util/popup_modify.dart';
 
-class PlaceKeyword extends ConsumerStatefulWidget {
-  const PlaceKeyword({super.key});
+class JawanYuji1st extends ConsumerStatefulWidget {
+  const JawanYuji1st({super.key});
 
   @override
-  ConsumerState<PlaceKeyword> createState() => _BlogListPlaceState();
+  ConsumerState<JawanYuji1st> createState() => _BlogStayState();
 }
 
-class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
+class _BlogStayState extends ConsumerState<JawanYuji1st> {
   int browserNumber = 1;
 
   @override
   Widget build(
     BuildContext context,
   ) {
-    final blogs = ref.watch(placeProvider1);
+// 팝업창 띄우기
+    final blogs = ref.watch(jawanYuji1stProvider);
 
     final copyAndDel = CopyAndInputdataProvider();
     final popupAndModify = ref.watch(popupAndModifyProvider);
@@ -36,7 +37,7 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
             child: blogs.when(
               data: (data) {
                 int documentNumber = 1;
-
+                final definedData = data.toList();
                 return Column(
                   children: [
                     const Row(
@@ -48,14 +49,14 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        for (int i = 0; i < data.length; i += 5)
+                        for (int i = 0; i < definedData.length; i += 5)
                           Padding(
-                            padding: const EdgeInsets.all(2.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 for (int j = i;
-                                    j < i + 5 && j < data.length;
+                                    j < i + 5 && j < definedData.length;
                                     j++)
                                   Expanded(
                                     child: Wrap(
@@ -67,16 +68,15 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
                                             onTap: () {
                                               popupAndModify.showEditDialog(
                                                 context,
-                                                data[j].blogTitle,
-                                                data[j].id,
+                                                definedData[j].blogTitle,
+                                                definedData[j].id,
                                                 data[j].blogType ?? "null",
                                               );
-                                              setState(() {});
                                             },
                                             child: SizedBox(
                                               width: 200,
                                               child: Text(
-                                                "${documentNumber++}.${data[j].blogTitle}",
+                                                "${documentNumber++}.${definedData[j].blogTitle}",
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
@@ -84,10 +84,10 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
                                         ),
                                         ElevatedButton(
                                           onPressed: () async =>
-                                              copyAndDel.copyAndInputData1(
+                                              copyAndDel.copyAndInputData2(
                                             browserNumber,
                                             context,
-                                            data[j].blogTitle,
+                                            definedData[j].blogTitle,
                                           ),
                                           style: IconStyle.getButtonStyle(
                                               data[j].blogType.toString()),

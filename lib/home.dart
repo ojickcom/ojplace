@@ -3,16 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ojplace/authentification/authentication_repo.dart';
 import 'package:ojplace/authentification/log_in.dart';
 import 'package:ojplace/blog/blog_list.dart';
+import 'package:ojplace/jawan_list/keyword_li_jw_yuji2nd.dart';
+import 'package:ojplace/jawan_list/keyword_list_event.dart';
 import 'package:ojplace/jawan_list/keyword_list_place.dart';
-import 'package:ojplace/jawan_list/keyword_list_start.dart';
-import 'package:ojplace/jawan_list/keyword_list_yuji.dart';
-import 'package:ojplace/jawan_list/keyword_daegi.dart';
+import 'package:ojplace/jawan_list/keyword_li_mkjw_1st.dart';
+import 'package:ojplace/jawan_list/keyword_li_jw_yuji1st.dart';
+import 'package:ojplace/jawan_list/keyword_li_mkjw_2nd.dart';
 import 'package:ojplace/jawan_list/keyword_add.dart';
 import 'package:ojplace/jawan_list/keyword_list_all.dart';
-import 'package:ojplace/client_list/add_clinent.dart';
-import 'package:ojplace/client_list/client_list_view.dart';
+import 'package:ojplace/client_list/client_list.dart';
 import 'package:ojplace/constants/gaps.dart';
-import 'package:ojplace/jawan_list/mk_list_1st.dart';
+import 'package:ojplace/jawan_list/keyword_list_place_yuji.dart';
+import 'package:ojplace/jawan_list/keyword_list_new_keyword.dart';
+import 'package:ojplace/jawan_list/keyword_list_standby.dart';
+import 'package:ojplace/jawan_list/mvvm/util/keyword_search.dart';
+import 'package:ojplace/jawan_list/reset_keywordlist_1st.dart';
 
 class Home extends ConsumerWidget {
   const Home({super.key});
@@ -39,9 +44,45 @@ class Home extends ConsumerWidget {
       );
     }
 
+    void goKeywordList() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const KeywordAll(),
+        ),
+      );
+    }
+
+    void goKeywordInput() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const KeywordAdd(),
+        ),
+      );
+    }
+
+    void goClientList() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ClientListView(),
+        ),
+      );
+    }
+
+    void goSearch() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const KeywordSearch(),
+        ),
+      );
+    }
+
     return MaterialApp(
       home: DefaultTabController(
-        length: 9,
+        length: 10,
         initialIndex: 0,
         child: Scaffold(
           appBar: AppBar(
@@ -59,24 +100,68 @@ class Home extends ConsumerWidget {
                   ),
                 ),
                 GestureDetector(
-                    onTap: goToLogin,
-                    child: const Text(
-                      "로그인",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    )),
+                  onTap: goToLogin,
+                  child: const Text(
+                    "로그인",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
                 Gaps.h28,
                 GestureDetector(
-                    onTap: goBlog,
-                    child: const Text(
-                      "블로그",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    )),
+                  onTap: goBlog,
+                  child: const Text(
+                    "블로그",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                Gaps.h28,
+                GestureDetector(
+                  onTap: goKeywordInput,
+                  child: const Text(
+                    "키워드 입력",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                Gaps.h28,
+                GestureDetector(
+                  onTap: goKeywordList,
+                  child: const Text(
+                    "키워드현황",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                Gaps.h28,
+                GestureDetector(
+                  onTap: goClientList,
+                  child: const Text(
+                    "클라이언트 현황",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                Gaps.h28,
+                ElevatedButton.icon(
+                  onPressed: goSearch,
+                  icon: const Icon(
+                    Icons.search,
+                    size: 10,
+                  ),
+                  label: const Text("search"),
+                )
               ],
             ),
             centerTitle: true,
@@ -85,28 +170,31 @@ class Home extends ConsumerWidget {
             bottom: const TabBar(
               tabs: [
                 Tab(
-                  text: "자완 클릭(초입)",
+                  text: "자완생성1",
                 ),
                 Tab(
-                  text: "자완 유지용",
+                  text: "자완생성2(끝생략)",
                 ),
                 Tab(
-                  text: "플레이스 클릭",
+                  text: "자완유지1",
                 ),
                 Tab(
-                  text: "자완 대기",
+                  text: "자완유지2(끝생략)",
                 ),
                 Tab(
-                  text: "키워드 입력",
+                  text: "플레이스 진입",
                 ),
                 Tab(
-                  text: "키워드 현황",
+                  text: "플레이스 유지",
                 ),
                 Tab(
-                  text: "클라이언트 리스트 ",
+                  text: "신규",
                 ),
                 Tab(
-                  text: "클라이언트 추가",
+                  text: "대기",
+                ),
+                Tab(
+                  text: "Mnprice",
                 ),
                 Tab(
                   text: "초기화",
@@ -118,12 +206,22 @@ class Home extends ConsumerWidget {
             child: TabBarView(
               children: [
                 isLoggedIn.when(
-                  data: (data) => data ? jawanStart() : login(),
+                  data: (data) => data ? mkJawan1stButton() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
                 isLoggedIn.when(
-                  data: (data) => data ? jawanYuji() : login(),
+                  data: (data) => data ? mkJawan2ndButton() : login(),
+                  loading: () => const CircularProgressIndicator(),
+                  error: (error, _) => Text('Error: $error'),
+                ),
+                isLoggedIn.when(
+                  data: (data) => data ? jawanYuji1st() : login(),
+                  loading: () => const CircularProgressIndicator(),
+                  error: (error, _) => Text('Error: $error'),
+                ),
+                isLoggedIn.when(
+                  data: (data) => data ? jawanYuji2nd() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
@@ -133,27 +231,22 @@ class Home extends ConsumerWidget {
                   error: (error, _) => Text('Error: $error'),
                 ),
                 isLoggedIn.when(
-                  data: (data) => data ? jawanDaegi() : login(),
+                  data: (data) => data ? placeYuji() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
                 isLoggedIn.when(
-                  data: (data) => data ? wrightingPost() : login(),
+                  data: (data) => data ? const NewKeyword() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
                 isLoggedIn.when(
-                  data: (data) => data ? keywordAll() : login(),
+                  data: (data) => data ? standBy() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
                 isLoggedIn.when(
-                  data: (data) => data ? clientList() : login(),
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, _) => Text('Error: $error'),
-                ),
-                isLoggedIn.when(
-                  data: (data) => data ? _buildAddClientForm() : login(),
+                  data: (data) => data ? const EventNow() : login(),
                   loading: () => const CircularProgressIndicator(),
                   error: (error, _) => Text('Error: $error'),
                 ),
@@ -172,49 +265,41 @@ class Home extends ConsumerWidget {
   }
 }
 
-Widget jawanStart() {
-  return const JawanStart();
+Widget mkJawan1stButton() {
+  return const MkJawan1st();
 }
 
-Widget jawanYuji() {
-  return const JawanYuji();
+Widget mkJawan2ndButton() {
+  return const MkJawan2nd();
+}
+
+Widget jawanYuji1st() {
+  return const JawanYuji1st();
+}
+
+Widget jawanYuji2nd() {
+  return const JawanYuji2nd();
 }
 
 Widget placeKeyword() {
   return const PlaceKeyword();
 }
 
-Widget keywordAll() {
-  return const KeywordAll();
+Widget placeYuji() {
+  return const PlaceYuji();
 }
 
-Widget jawanDaegi() {
-  return const JawanDaegi();
-}
-
-Widget wrightingPost() {
-  return const BlogAdd();
-}
-
-Widget clientList() {
-  return const ClientListView();
-}
-
-Widget _buildClientList() {
-  return const ClientListView();
-}
-
-Widget _buildAddClientForm() {
-  // 클라이언트 추가 폼 구현
-  return AddClient();
+Widget standBy() {
+  return const StandbyKeyword();
 }
 
 Widget mk1st() {
   // 클라이언트 추가 폼 구현
-  return const MkList1st();
+  return const ResetKeywordList1st();
 }
 
 Widget login() {
   return const LogIn();
 }
 // }
+

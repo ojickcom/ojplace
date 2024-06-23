@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ojplace/client_list/client_viewmodel.dart';
+import 'package:ojplace/client_list/client_vm.dart';
 
 class ClientEditScreen extends ConsumerWidget {
   final dynamic client;
@@ -8,11 +8,11 @@ class ClientEditScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final updateClient = ref.watch(updateClientProvider);
+    final updateClient = ref.watch(clientViewModelProvider);
     final nameController =
         TextEditingController(text: client.clientsName ?? '');
     final keywordController =
-        TextEditingController(text: client.targetKeywords ?? '');
+        TextEditingController(text: client.Keywords ?? '');
 
     return Scaffold(
       body: Center(
@@ -83,8 +83,8 @@ class ClientEditScreen extends ConsumerWidget {
                 onPressed: () {
                   String updatedName = nameController.text;
                   String updatedKeyword = keywordController.text;
-                  updateClient.updateClient(
-                      client.id, updatedName, updatedKeyword, ref, context);
+                  // updateClient.value(
+                  //     client.id, updatedName, updatedKeyword, ref, context);
                 },
                 icon: const Icon(
                   Icons.accessibility_rounded,

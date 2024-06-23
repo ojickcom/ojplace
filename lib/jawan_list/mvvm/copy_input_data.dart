@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
 import 'package:ojplace/jawan_list/mvvm/util/popup_color.dart';
 import 'package:ojplace/jawan_list/mvvm/util/user_select.dart';
 

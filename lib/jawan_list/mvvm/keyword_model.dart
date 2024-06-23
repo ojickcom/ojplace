@@ -23,7 +23,7 @@ class KeywordModel {
     this.history = const [],
     this.startDate,
     this.nurak = 0,
-    this.price = 120000,
+    this.price = 30000,
   });
 
   KeywordModel copyWith({

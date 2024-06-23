@@ -1,29 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ojplace/constants/gaps.dart';
 import 'package:ojplace/jawan_list/mvvm/copy_input_data.dart';
 import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
-import 'package:ojplace/jawan_list/mvvm/util/button_color.dart';
+import 'package:ojplace/constants/gaps.dart';
 import 'package:ojplace/jawan_list/mvvm/util/popup_modify.dart';
+import 'package:ojplace/jawan_list/mvvm/util/format_list.dart';
 
-class JawanYuji extends ConsumerStatefulWidget {
-  const JawanYuji({super.key});
+class PlaceKeyword extends ConsumerStatefulWidget {
+  const PlaceKeyword({super.key});
 
   @override
-  ConsumerState<JawanYuji> createState() => _BlogStayState();
+  ConsumerState<PlaceKeyword> createState() => _BlogListPlaceState();
 }
 
-class _BlogStayState extends ConsumerState<JawanYuji> {
-  int browserNumber = 1;
-  String userEmail = '';
-
+class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
   @override
   void initState() {
     super.initState();
     getUserEmail();
   }
 
+  int browserNumber = 1;
+  String userEmail = '';
   FirebaseAuth auth = FirebaseAuth.instance;
   void getUserEmail() {
     User? user = auth.currentUser;
@@ -38,8 +37,7 @@ class _BlogStayState extends ConsumerState<JawanYuji> {
   Widget build(
     BuildContext context,
   ) {
-// 팝업창 띄우기
-    final blogs = ref.watch(blogStayProvider);
+    final blogs = ref.watch(placeProvider1);
     final TextEditingController textEditingController = TextEditingController();
     final copyAndDel = CopyAndInputdataProvider();
     final popupAndModify = ref.watch(popupAndModifyProvider);
@@ -53,7 +51,7 @@ class _BlogStayState extends ConsumerState<JawanYuji> {
             child: blogs.when(
               data: (data) {
                 int documentNumber = 1;
-                final definedData = data.toList();
+
                 return Column(
                   children: [
                     Row(
@@ -80,87 +78,32 @@ class _BlogStayState extends ConsumerState<JawanYuji> {
                           },
                           child: const Text("입력"),
                         ),
+                        Gaps.h14,
+                        ElevatedButton(
+                          onPressed: () {
+                            final mkWebBrowser =
+                                ref.read(mkWebBrowserProvider.notifier);
+                            mkWebBrowser.mkPlaceBrowser1([]);
+                            print("mk성공");
+                          },
+                          child: const Text('ID만들기3'),
+                        ),
                         Gaps.h20,
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 161, 8, 221)),
-                          child: const Text(
-                            "첫페이지",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Gaps.h10,
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 180, 133, 2)),
-                          child: const Text(
-                            "지정블로그",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Gaps.h10,
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 221, 207, 8)),
-                          child: const Text(
-                            "지정웹문서",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Gaps.h10,
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue),
-                          child: const Text(
-                            "랜덤블로그",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Gaps.h10,
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 16, 141, 80)),
-                          child: const Text(
-                            "플레이스",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Gaps.h10,
                         Text(userEmail),
-                        Gaps.h10,
                       ],
                     ),
                     //한 행에 3개씩 정렬하기
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        for (int i = 0; i < definedData.length; i += 3)
+                        for (int i = 0; i < data.length; i += 3)
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 for (int j = i;
-                                    j < i + 3 && j < definedData.length;
+                                    j < i + 3 && j < data.length;
                                     j++)
                                   Expanded(
                                     child: Wrap(
@@ -172,15 +115,16 @@ class _BlogStayState extends ConsumerState<JawanYuji> {
                                             onTap: () {
                                               popupAndModify.showEditDialog(
                                                 context,
-                                                definedData[j].blogTitle,
-                                                definedData[j].id,
+                                                data[j].blogTitle,
+                                                data[j].id,
                                                 data[j].blogType ?? "null",
                                               );
+                                              setState(() {});
                                             },
                                             child: SizedBox(
                                               width: 200,
                                               child: Text(
-                                                "${documentNumber++}.${definedData[j].blogTitle}",
+                                                "${documentNumber++}.${data[j].blogTitle}",
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
@@ -188,14 +132,12 @@ class _BlogStayState extends ConsumerState<JawanYuji> {
                                         ),
                                         ElevatedButton(
                                           onPressed: () async =>
-                                              copyAndDel.copyAndInputData2(
+                                              copyAndDel.copyAndInputData1(
                                             browserNumber,
                                             context,
-                                            definedData[j].blogTitle,
+                                            data[j].blogTitle,
                                           ),
-                                          style: IconStyle.getButtonStyle(
-                                              data[j].blogType.toString()),
-                                          child: const Text("+"),
+                                          child: const Text("복사 "),
                                         ),
                                         const SizedBox(width: 16),
 
