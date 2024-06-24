@@ -36,12 +36,33 @@ class _BlogListPlaceState extends ConsumerState<MkJawan2nd> {
             child: blogs.when(
               data: (data) {
                 int documentNumber = 1;
-
+                final TextEditingController textEditingController =
+                    TextEditingController();
                 return Column(
                   children: [
-                    const Row(
+                    Row(
                       children: [
-                        ActionButtons(),
+                        SizedBox(
+                          width: 50,
+                          child: TextField(
+                            decoration: const InputDecoration(),
+                            controller: textEditingController,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final String enteredBrowserNumber =
+                                textEditingController.text;
+
+                            if (int.tryParse(enteredBrowserNumber) == null) {
+                              return;
+                            }
+
+                            browserNumber = int.parse(enteredBrowserNumber);
+                          },
+                          child: const Text("입력"),
+                        ),
+                        const ActionButtons(),
                       ],
                     ),
                     Column(

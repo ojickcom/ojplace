@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ojplace/constants/sizes.dart';
 import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
-import 'package:ojplace/constants/color_scheme.dart';
 import 'package:ojplace/constants/gaps.dart';
 import 'package:ojplace/jawan_list/mvvm/util/keyword_selection_widget.dart';
-import 'package:ojplace/jawan_list/mvvm/util/format_list.dart';
 
 class KeywordAdd extends ConsumerStatefulWidget {
   const KeywordAdd({Key? key}) : super(key: key);

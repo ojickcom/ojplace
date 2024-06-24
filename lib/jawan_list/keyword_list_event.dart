@@ -27,7 +27,7 @@ class _BlogListPlaceState extends ConsumerState<EventNow> {
 
     final copyAndDel = CopyAndInputdataProvider3();
     final popupAndModify = ref.watch(popupAndModifyProvider);
-
+    final TextEditingController textEditingController = TextEditingController();
 //본문 시작 됨
     return Scaffold(
       body: Center(
@@ -40,9 +40,29 @@ class _BlogListPlaceState extends ConsumerState<EventNow> {
 
                 return Column(
                   children: [
-                    const Row(
+                    Row(
                       children: [
-                        ActionButtons(),
+                        SizedBox(
+                          width: 50,
+                          child: TextField(
+                            decoration: const InputDecoration(),
+                            controller: textEditingController,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final String enteredBrowserNumber =
+                                textEditingController.text;
+
+                            if (int.tryParse(enteredBrowserNumber) == null) {
+                              return;
+                            }
+
+                            browserNumber = int.parse(enteredBrowserNumber);
+                          },
+                          child: const Text("입력"),
+                        ),
+                        const ActionButtons(),
                       ],
                     ),
                     //한 행에 3개씩 정렬하기

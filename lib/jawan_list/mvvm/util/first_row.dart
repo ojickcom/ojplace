@@ -23,34 +23,14 @@ class _ActionButtonsState extends State<ActionButtons> {
     if (user != null) {
       userEmail = user.email ?? ''; // 사용자의 이메일을 userEmail 변수에 저장합니다.
     } else {
-      print('현재 로그인된 사용자가 없습니다.');
+      // print('현재 로그인된 사용자가 없습니다.');
     }
   }
 
-  final TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          width: 50,
-          child: TextField(
-            decoration: const InputDecoration(),
-            controller: textEditingController,
-          ),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            final String enteredBrowserNumber = textEditingController.text;
-
-            if (int.tryParse(enteredBrowserNumber) == null) {
-              return;
-            }
-
-            browserNumber = int.parse(enteredBrowserNumber);
-          },
-          child: const Text("입력"),
-        ),
         ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(

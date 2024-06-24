@@ -23,8 +23,7 @@ class _BlogListPlaceState extends ConsumerState<MkJawan1st> {
     final blogs = ref.watch(mkJawan1stProvider);
     final copyAndDel = CopyAndInputdataProvider1();
     final popupAndModify = ref.watch(popupAndModifyProvider);
-
-//본문 시작 됨
+    final TextEditingController textEditingController = TextEditingController();
     return Scaffold(
       body: Center(
         child: SizedBox(
@@ -36,9 +35,29 @@ class _BlogListPlaceState extends ConsumerState<MkJawan1st> {
 
                 return Column(
                   children: [
-                    const Row(
+                    Row(
                       children: [
-                        ActionButtons(),
+                        SizedBox(
+                          width: 50,
+                          child: TextField(
+                            decoration: const InputDecoration(),
+                            controller: textEditingController,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final String enteredBrowserNumber =
+                                textEditingController.text;
+
+                            if (int.tryParse(enteredBrowserNumber) == null) {
+                              return;
+                            }
+
+                            browserNumber = int.parse(enteredBrowserNumber);
+                          },
+                          child: const Text("입력"),
+                        ),
+                        const ActionButtons(),
                       ],
                     ),
                     //한 행에 3개씩 정렬하기
@@ -56,7 +75,6 @@ class _BlogListPlaceState extends ConsumerState<MkJawan1st> {
                                     j++)
                                   Expanded(
                                     child: Wrap(
-                                      // alignment: WrapAlignment.start,
                                       children: [
                                         SizedBox(
                                           width: 200,
@@ -80,19 +98,20 @@ class _BlogListPlaceState extends ConsumerState<MkJawan1st> {
                                           ),
                                         ),
                                         ElevatedButton(
-                                          onPressed: () async =>
-                                              copyAndDel.copyAndInputData(
-                                            browserNumber,
-                                            context,
-                                            data[j].blogTitle,
-                                          ),
+                                          onPressed: () async {
+                                            // print(
+                                            //     "browserNumber: $browserNumber"); // 디버깅 로그 추가
+                                            await copyAndDel.copyAndInputData(
+                                              browserNumber,
+                                              context,
+                                              data[j].blogTitle,
+                                            );
+                                          },
                                           style: IconStyle.getButtonStyle(
                                               data[j].blogType.toString()),
                                           child: const Text("+"),
                                         ),
                                         const SizedBox(width: 16),
-
-                                        // 각 아이템 사이의 간격을 조절합니다.
                                       ],
                                     ),
                                   ),

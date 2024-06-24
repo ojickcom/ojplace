@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'dart:core';
 import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
 import 'package:ojplace/constants/gaps.dart';
 import 'package:ojplace/jawan_list/mvvm/util/popup_modify.dart';
@@ -24,13 +23,13 @@ class _BlogPostingListState extends ConsumerState<KeywordAll> {
   }
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  int? nurakValue;
+  int? countValue;
   int? priceValue;
 
-  Future<void> nurak(BuildContext context, int nurakValue, String id) async {
+  Future<void> count(BuildContext context, int countValue, String id) async {
     try {
       await firestore.collection("blog").doc(id).update({
-        "nurak": nurakValue,
+        "count": countValue,
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -66,7 +65,7 @@ class _BlogPostingListState extends ConsumerState<KeywordAll> {
           content: TextField(
             keyboardType: TextInputType.number, // 숫자만 입력할 수 있도록 설정
             onChanged: (value) {
-              nurakValue = int.tryParse(value); // 입력된 값이 숫자인지 확인하고 변수에 저장
+              countValue = int.tryParse(value); // 입력된 값이 숫자인지 확인하고 변수에 저장
             },
           ),
           actions: <Widget>[
@@ -79,8 +78,8 @@ class _BlogPostingListState extends ConsumerState<KeywordAll> {
             TextButton(
               onPressed: () {
                 // 확인 버튼
-                if (nurakValue != null) {
-                  nurak(context, nurakValue!, id); // nurak 함수 호출
+                if (countValue != null) {
+                  count(context, countValue!, id); // count 함수 호출
                   Navigator.of(context).pop(); // 팝업 닫기
                 }
               },
@@ -115,7 +114,7 @@ class _BlogPostingListState extends ConsumerState<KeywordAll> {
               onPressed: () {
                 // 확인 버튼
                 if (priceValue != null) {
-                  price(context, priceValue!, id); // nurak 함수 호출
+                  price(context, priceValue!, id); // count 함수 호출
                   Navigator.of(context).pop(); // 팝업 닫기
                 }
               },
@@ -236,12 +235,12 @@ class _BlogPostingListState extends ConsumerState<KeywordAll> {
                   itemBuilder: (context, index) {
                     final filteredData = data.toList();
                     final blog = filteredData[index];
-                    const int nurak = 3;
+                    const int daycount = 3;
                     final startDate = DateFormat('yy년MM월dd일')
                         .format(blog.startDate ?? DateTime.now());
                     final oneMonthLater = DateFormat('yy년MM월dd일').format(
                         (blog.startDate ?? DateTime.now())
-                            .add(const Duration(days: 30 + nurak)));
+                            .add(const Duration(days: 30 + daycount)));
                     return Column(children: [
                       Row(
                         children: [
@@ -280,10 +279,6 @@ class _BlogPostingListState extends ConsumerState<KeywordAll> {
                                   children: [
                                     Text(
                                       "주문: $startDate",
-                                      // "주문: ${DateFormat('yy년MM월dd일').format(
-                                      //   blog.timestamp?.toDate() ??
-                                      //       DateTime.now(),
-                                      // )}",
                                     ),
                                     Gaps.h10,
                                     GestureDetector(
@@ -291,7 +286,7 @@ class _BlogPostingListState extends ConsumerState<KeywordAll> {
                                         showNurakInputDialog(context, blog.id);
                                       },
                                       child: Text(
-                                        "누락일: ${blog.nurak}",
+                                        "누락일: ${blog.itemCount}",
                                         style:
                                             const TextStyle(color: Colors.red),
                                       ),
@@ -365,9 +360,9 @@ class _BlogPostingListState extends ConsumerState<KeywordAll> {
                             ),
                           ),
                           Gaps.h14,
-                          const SizedBox(
+                          SizedBox(
                             width: 50,
-                            child: Text("칸트: "),
+                            child: Text("칸트:${blog.itemCount} "),
                           ),
                           Gaps.h14,
                           ElevatedButton(

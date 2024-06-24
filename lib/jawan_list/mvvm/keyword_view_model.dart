@@ -42,17 +42,33 @@ class BlogViewModel extends StateNotifier<List<KeywordModel>> {
           .collection("blog")
           .orderBy('timestamp', descending: true)
           .get();
+
       List<KeywordModel> blogs = [];
 
       for (var doc in querySnapshot.docs) {
         final String id = doc.id;
-        blogs.add(KeywordModel.fromJson(
-            doc.data()! as Map<String, dynamic>? ?? {},
-            id: id));
+
+        // 날짜별 클릭 수 가져오기
+        final String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+        final clicksCollection = doc.reference.collection('clicks');
+        final clickDoc = await clicksCollection.doc(today).get();
+
+        // 필드 존재 여부 확인 후 클릭 수 가져오기
+        final int itemCount =
+            clickDoc.exists && clickDoc.data()!.containsKey('itemCount')
+                ? clickDoc.get('itemCount') as int
+                : 0;
+
+        // KeywordModel 초기화 및 itemCount 설정
+        KeywordModel keyword =
+            KeywordModel.fromJson(doc.data()! as Map<String, dynamic>, id: id)
+                .copyWith(itemCount: itemCount);
+        blogs.add(keyword);
       }
+
       return blogs;
     } catch (e) {
-      // print(" Erro : $e");
+      // print("Error: $e");
       rethrow;
     }
   }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ojplace/jawan_list/mvvm/util/click_count.dart';
 import 'package:ojplace/jawan_list/mvvm/util/input_db_vm.dart';
 import 'package:ojplace/jawan_list/mvvm/util/popup_color.dart';
 import 'package:ojplace/jawan_list/mvvm/util/show_input_dialog.dart';
@@ -9,21 +10,29 @@ import 'package:ojplace/jawan_list/mvvm/util/user_select.dart';
 class CopyAndInputdataProvider1 {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final UserClass userClass = UserClass();
+  final ClickCounter clickCounter;
+
+  CopyAndInputdataProvider1()
+      : clickCounter = ClickCounter(FirebaseFirestore.instance);
 
   Future<void> copyAndInputData(
       int browserNumber, BuildContext context, String blogTitle) async {
     await Clipboard.setData(ClipboardData(text: blogTitle));
+
     final CollectionReference? webBrowserCollection =
         userClass.getUserWebBrowserCollection();
 
     if (webBrowserCollection == null) {
-      print("CollectionReference 가져오기 실패");
+      // print("CollectionReference 가져오기 실패");
       return;
     }
 
     try {
       final docSnapshot =
           await webBrowserCollection.doc(browserNumber.toString()).get();
+
+      // 오류 로그 추가
+      // print('browserNumber: $browserNumber, docSnapshot ID: ${docSnapshot.id}');
 
       final List<String> uids = docSnapshot.get('uid')?.cast<String>() ?? [];
       if (!uids.contains(blogTitle)) {
@@ -35,13 +44,15 @@ class CopyAndInputdataProvider1 {
             await InputDbProvider.getTargetKeywordType(firestore, blogTitle);
         final PopupStyle popupStyle = PopupStyle.fromBlogType(blogType ?? "");
 
+        await clickCounter.incrementClickCount(blogTitle);
+
         await showInputDialog(
             context, popupStyle.backgroundColor, popupStyle.titleText);
       } else {
         await showInputDialog(context, Colors.red, "중복 됨");
       }
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 }

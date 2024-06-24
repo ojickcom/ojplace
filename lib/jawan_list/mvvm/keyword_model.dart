@@ -10,7 +10,7 @@ class KeywordModel {
   final Timestamp? timestamp;
   final List<KeywordHistory> history;
   final DateTime? startDate;
-  int nurak;
+  int itemCount;
   int price;
 
   KeywordModel({
@@ -22,7 +22,7 @@ class KeywordModel {
     this.timestamp,
     this.history = const [],
     this.startDate,
-    this.nurak = 0,
+    this.itemCount = 0,
     this.price = 30000,
   });
 
@@ -35,14 +35,14 @@ class KeywordModel {
     Timestamp? timestamp,
     DateTime? startDate,
     List<KeywordHistory>? history,
-    int? nurak,
+    int? itemCount,
     int? price,
   }) {
     return KeywordModel(
       blogTitle: blogTitle ?? this.blogTitle,
       blogGroup: blogGroup ?? this.blogGroup,
       blogType: blogType ?? this.blogType,
-      nurak: nurak ?? this.nurak,
+      itemCount: itemCount ?? this.itemCount,
       keywordStatus: keywordStatus ?? this.keywordStatus,
       id: id ?? this.id,
       timestamp: timestamp ?? this.timestamp,
@@ -68,7 +68,7 @@ class KeywordModel {
       startDate: startDate,
       id: id,
       history: history,
-      nurak: map['nurak'] as int? ?? 0,
+      itemCount: map['itemCount'] as int? ?? 0,
       price: map['price'] as int? ?? 120000,
     );
   }
@@ -80,7 +80,7 @@ class KeywordModel {
         "startDate": startDate?.toString(),
         "timestamp": timestamp,
         "history": history.map((h) => h.toJson()).toList(),
-        "nurak": nurak,
+        "itemCount": itemCount,
         "price": price,
       };
   String get formattedStartDate {
