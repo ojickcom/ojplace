@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ojplace/jawan_list/mvvm/copy_input_data.dart';
+import 'package:ojplace/jawan_list/mvvm/copy_input_db1.dart';
 import 'package:ojplace/jawan_list/mvvm/keyword_view_model.dart';
 import 'package:ojplace/constants/gaps.dart';
 import 'package:ojplace/jawan_list/mvvm/util/button_color.dart';
@@ -24,7 +24,7 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
   ) {
     final blogs = ref.watch(placeProvider1);
 
-    final copyAndDel = CopyAndInputdataProvider();
+    final copyAndDel = CopyAndInputdataProvider1();
     final popupAndModify = ref.watch(popupAndModifyProvider);
 
 //본문 시작 됨
@@ -84,7 +84,7 @@ class _BlogListPlaceState extends ConsumerState<PlaceKeyword> {
                                         ),
                                         ElevatedButton(
                                           onPressed: () async =>
-                                              copyAndDel.copyAndInputData1(
+                                              copyAndDel.copyAndInputData(
                                             browserNumber,
                                             context,
                                             data[j].blogTitle,
